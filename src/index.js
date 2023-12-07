@@ -6,33 +6,36 @@ import {
 } from "react-router-dom";
 import Helmet from "react-helmet"
 
-import { Home, Error} from './pages/index';
+import { Login, Error, Home} from './pages/index';
+import { AuthProvider, ProtectedRoute } from './auth/index';
 import './styles/main.css';
-// import App from './App';
-// import reportWebVitals from './reportWebVitals';
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
     errorElement: <Error />,
   },
+  {
+    path: "/login",
+    element:  <Login />,
+    errorElement: <Error />
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <>
+  <AuthProvider>
     <Helmet>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     </Helmet>
     <React.StrictMode>
       <RouterProvider router={router} />
     </React.StrictMode>
-  </>
+  </AuthProvider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();

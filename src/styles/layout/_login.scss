@@ -10,6 +10,7 @@
     position: fixed;
     inset: 0;
 
+    cursor: pointer;
     transition: transform 250ms ease-in-out, filter 250ms linear;
   
     img {
@@ -35,7 +36,7 @@
     bottom: 0;
     left: 0;
 
-    transition: transform 150ms ease-in-out;
+    transition: transform 200ms ease-in-out;
   }
 
   .login-button-container {
@@ -69,14 +70,28 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    width: 400px;
+    max-width: 90vw;
     
     display: grid;
     gap: 4px;
+
+    #error-msg {
+      color: #c0392b;
+      text-align: center;
+      max-width: 100%;
+    }
     
     .input {
       font-size: 2rem;
       border-radius: 4px;
       padding: 4px 8px;
+      &::placeholder {
+        color: #FFFFFF99;
+      }
+      &::-ms-input-placeholder {
+        color: #FFFFFF99;
+      }
     }
 
     transform: translate(-50%, -50%) scale(0.8);
@@ -84,9 +99,14 @@
 
     transition: transform 150ms ease-in-out, opacity 150ms linear;
   }
+  .button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
   &.open {
     .fullscreen-background {
-      filter: blur(2px) brightness(0.9);
+      filter: blur(10px) brightness(0.9);
       transform: scale(1.3);
     }
     .data-info {
