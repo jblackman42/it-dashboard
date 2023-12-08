@@ -2,6 +2,8 @@ import React, { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+import { Loading } from '../components';
+
 // function parseJwt (token) {
 //   var base64Url = token.split('.')[1];
 //   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -35,12 +37,8 @@ export const AuthProvider = ({ children }) => {
     const access_token = Cookies.get('access_token');
     const refresh_token = Cookies.get('refresh_token');
 
-    console.log(access_token)
-    console.log(refresh_token)
-
     if (access_token) {
       // user is currently logged in
-      
       setIsAuthenticated(true);
       setLoading(false);
     } else if (refresh_token) {
@@ -59,8 +57,6 @@ export const AuthProvider = ({ children }) => {
       // user is not logged in
       setLoading(false);
     }
-    // setIsAuthenticated(!!access_token); // Update authentication status
-    // setLoading(false); // Set loading to false after checking the token
   }, []);
 
   const login = (access_token, refresh_token, expires_in) => {
@@ -69,14 +65,46 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      const access_token = Cookies.get('access_token');
+      const refresh_token = Cookies.get('refresh_toke');
+      if (access_token) {
+        await axios({
+          method: 'post',
+          url: 'http://localhost:5000/api/auth/revoke',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify({
+            token: access_token,
+            token_hint: 'access_token'
+          })
+        })
+      }
+      if (refresh_token) {
+        await axios({
+          method: 'post',
+          url: 'http://localhost:5000/api/auth/revoke',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify({
+            token: refresh_token,
+            token_hint: 'refresh_token'
+          })
+        })
+      }
+    } catch (error) {
+      console.error("Failed to revoke auth tokens.")
+    }
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     setIsAuthenticated(false);
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Or any other loading indicator
+    return <Loading />;
   }
 
   return (

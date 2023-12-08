@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import { AuthContext } from '../auth/index';
-import { Weather } from '../components/index.js';
+import { AuthContext } from '../auth';
+import { Weather } from '../components';
 import background from '../assets/mountains-background.jpg';
 
 // import {AiOutlineArrowDown} from 'react-icons/ai';
@@ -28,7 +28,7 @@ const Greetings = [
 ]
 const currGreeting = Greetings[Math.floor(Math.random() * Greetings.length)];
 
-function Login() {
+function Login({path="/"}) {
   const [CurrentTime, setCurrentTime] = useState(new Date());
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -67,7 +67,7 @@ function Login() {
       const { access_token, expires_in, refresh_token } = tokenData;
 
       login(access_token, refresh_token, expires_in);
-      navigate('/');
+      navigate(path);
 
       // Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24 });
       // Cookies.set('refresh_token', refresh_token);
@@ -114,6 +114,7 @@ function Login() {
             type="text"
             className="clear input font-light"
             placeholder="Username"
+            autoComplete="off"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -121,6 +122,7 @@ function Login() {
             type="password"
             className="clear input font-light"
             placeholder="Password"
+            autoComplete="off"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
