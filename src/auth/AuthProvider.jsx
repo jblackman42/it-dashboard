@@ -1,22 +1,26 @@
 import React, { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { AnimatePresence } from "framer-motion";
 
 import { Loading } from '../components';
 
-// function parseJwt (token) {
-//   var base64Url = token.split('.')[1];
-//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-//   var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-//       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-//   }).join(''));
+// const apiURI = 'http://localhost:5000';
+const apiURI = 'http://10.13.13.34:5000';
 
-//   return JSON.parse(jsonPayload);
-// }
+export function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
 
 const refreshAccessToken = async (refresh_token) => await axios({
   method: 'post',
-  url: 'http://localhost:5000/api/auth/refresh',
+  url: `${apiURI}/api/auth/refresh`,
   headers: {
     'Content-Type': 'application/json'
   },
@@ -72,7 +76,7 @@ export const AuthProvider = ({ children }) => {
       if (access_token) {
         await axios({
           method: 'post',
-          url: 'http://localhost:5000/api/auth/revoke',
+          url: `${apiURI}/api/auth/revoke`,
           headers: {
             'Content-Type': 'application/json'
           },
@@ -85,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       if (refresh_token) {
         await axios({
           method: 'post',
-          url: 'http://localhost:5000/api/auth/revoke',
+          url: `${apiURI}/api/auth/revoke`,
           headers: {
             'Content-Type': 'application/json'
           },
@@ -109,7 +113,9 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
+      <AnimatePresence mode="wait">
+        {children}
+      </AnimatePresence>
     </AuthContext.Provider>
   );
 };

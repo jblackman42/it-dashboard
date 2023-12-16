@@ -1,0 +1,178 @@
+$navBackgroundColor: rgba(0, 0, 0, 0.2);
+$navHoverBackgroundColor: white;
+$navTextColor: white;
+$navHoverTextColor: black;
+
+// Root Variables
+:root {
+  --navItemBorderRadius: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --navItemBorderRadius: 8px;
+  }
+  // .sidebar-navigation {
+  //   grid-template-rows: 0% 100% 0% !important;
+  //   .navigation-list {
+  //     align-items: flex-start !important;
+  //   }
+  // }
+}
+
+// Sidebar Navigation Styles
+.sidebar-navigation {
+  background-color: $navBackgroundColor;
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  width: max-content;
+  padding-block: 1rem;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-rows: 10% 80% 10%;
+  // grid-template-rows: max-content auto max-content;
+
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  // justify-content: center;
+
+  box-shadow: 3px 0px 6px 0px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+
+  .img-container {
+    width: 100%;
+    height: 100%;
+    img {
+      max-width: 90%;
+      width: 120px;
+      margin: 0 auto;
+    }
+  }
+  .welcome-message {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-inline: 1rem;
+    box-sizing: border-box;
+  }
+  .navigation-list {
+    display: flex;
+    align-items: center;
+  }
+
+  // Navigation List Styles
+  ul {
+    margin: 0 1rem 0 0;
+    padding: 0;
+    list-style-type: none;
+
+    // hide highlight when hovering over entire list
+    &:hover li a, &:focus-within li a {
+      color: $navTextColor !important;
+      background-color: transparent !important;
+      &::after, &::before {
+        display: none !important;
+      }
+    }
+    // List Item Styles
+    li a {
+      color: $navTextColor;
+      text-decoration: none;
+      font-size: 1.25em;
+      // gap: .5em;
+      padding: .5em 1.5rem;
+      display: flex;
+      align-items: center;
+      position: relative;
+      border-top-right-radius: var(--navItemBorderRadius);
+      border-bottom-right-radius: var(--navItemBorderRadius);
+      p {
+        white-space: nowrap;
+      }
+
+      // show highlight on 
+      &.active {
+        color: $navHoverTextColor;
+        background-color: $navHoverBackgroundColor;
+        &::after, &::before {
+          display: block;
+        }
+      }
+      &:hover, &:focus-within {
+        color: $navHoverTextColor !important;
+        background-color: $navHoverBackgroundColor !important;
+        &::after, &::before {
+          display: block !important;
+        }
+      }
+
+      // Pseudo-elements for active and hover states
+      &::after, &::before {
+        content: "";
+        position: absolute;
+        width: var(--navItemBorderRadius);
+        height: var(--navItemBorderRadius);
+        background-color: $navHoverBackgroundColor;
+        display: none;
+        left: 0;
+      }
+      &::before {
+        bottom: 100%;
+        mask-image: radial-gradient(circle at top right, transparent 0, transparent var(--navItemBorderRadius), black calc(var(--navItemBorderRadius) + 1px));
+      }
+      &::after {
+        top: 100%;
+        mask-image: radial-gradient(circle at bottom right, transparent 0, transparent var(--navItemBorderRadius), black calc(var(--navItemBorderRadius) + 1px));
+      }
+    }
+  }
+
+  // Responsive Design Adjustments
+  @media screen and (max-width: 768px) {
+    grid-template-rows: 0% 100% 0%;
+    .navigation-list {
+      align-items: flex-start;
+  
+      ul {
+        margin: 0 .5rem 0 0;
+  
+        li a {
+          padding: .5rem 1rem;
+          font-size: 1em;
+        }
+  
+        p {
+          display: none;
+          visibility: hidden;
+        }
+      }
+    }
+  }
+}
+
+// Sidebar close and open animation
+.sidebar-navigation {
+  .img-container, .welcome-message, ul li a p {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+
+    transition: max-width 150ms ease-in-out 215ms, opacity 200ms linear;
+  }
+  @media screen and (min-width: 767px) {
+    &:hover, &:focus-within {
+      .img-container, .welcome-message, ul li a p {
+        max-width: 200px; // should be wide enough for any link labels
+        opacity: 1;
+        
+        transition: max-width 200ms ease-in-out, opacity 200ms linear 175ms;
+      }
+    }
+  }
+}

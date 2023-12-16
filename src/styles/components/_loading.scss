@@ -33,7 +33,8 @@
   --animationDuration: calc(8s / (11 - var(--n)));
   --borderWidth: 10px;
   /* --borderWidth: 60px; */
-  --strokeColor: #2c3e50;
+  // --strokeColor: #2c3e50;
+  --strokeColor: #FFF;
   
   width: var(--width);
   aspect-ratio: 2;

@@ -36,11 +36,13 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-    <Helmet>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    </Helmet>
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    <>
+      <Helmet>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      </Helmet>
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>
+    </>
   </AuthProvider>
 );

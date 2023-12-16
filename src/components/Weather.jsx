@@ -13,7 +13,7 @@ const getLocalWeather = async (location) => {
   return response.json();
 }
 
-function Weather({rounded}) {
+function Weather({rounded = "true"}) {
   const [temperature, setTemperature] = useState(null);
   
   useEffect(() => {
@@ -42,12 +42,13 @@ function Weather({rounded}) {
   }, [rounded]);
 
   return (
-    <div className="weather font-light">
-      <FaSun style={{ color: '#fdd835' }}/>
-      {temperature &&
-        <p>{temperature}<sup>°F</sup></p>
+    <>
+      {temperature && <div className="weather font-light">
+          <FaSun style={{ color: '#fdd835' }}/>
+            <p>{temperature}<sup>°F</sup></p>
+        </div>
       }
-    </div>
+    </>
   )
 }
 

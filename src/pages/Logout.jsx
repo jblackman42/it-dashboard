@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 
 import { AuthContext } from '../auth';
 import { Loading } from '../components'
@@ -15,7 +15,7 @@ function Logout() {
       .then(() => {
         navigate('/login')
       })
-  }, []);
+  });
 
 
   return (

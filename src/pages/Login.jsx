@@ -7,7 +7,8 @@ import { AuthContext } from '../auth';
 import { Weather } from '../components';
 import background from '../assets/mountains-background.jpg';
 
-// import {AiOutlineArrowDown} from 'react-icons/ai';
+// const apiURI = 'http://localhost:5000';
+const apiURI = 'http://10.13.13.34:5000';
 
 const Greetings = [
   'Howdy!',
@@ -53,7 +54,7 @@ function Login({path="/"}) {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://localhost:5000/api/auth/authorize',
+        url: `${apiURI}/api/auth/authorize`,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -98,7 +99,9 @@ function Login({path="/"}) {
         <p id="greeting" className='font-light'>{currGreeting}</p>
         <div className="row">
           <h1 id="time" className='clock font-light'>{CurrentTime.toLocaleTimeString([], {timeStyle: 'short'}).replace('AM', '').replace('PM', '')}</h1>
-          <Weather id="weather" rounded="true"/>
+          <div className="weather-container">
+            <Weather id="weather" rounded="true"/>
+          </div>
         </div>
       </div>
 
