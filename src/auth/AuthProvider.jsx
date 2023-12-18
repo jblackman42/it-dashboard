@@ -6,13 +6,17 @@ import { AnimatePresence } from "framer-motion";
 import { Loading } from '../components';
 
 // const apiURI = 'http://localhost:5000';
-const apiURI = 'http://10.13.13.34:5000';
+// const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'http://192.168.68.104:5000';
+// const apiURI = 'https://dev.phc.events';
 
-export function parseJwt (token) {
+const isProduction = !(!process.env.NODE_ENV || process.env.NODE_ENV === "development");
+
+export function parseJwt(token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(''));
 
   return JSON.parse(jsonPayload);
@@ -50,7 +54,7 @@ export const AuthProvider = ({ children }) => {
       refreshAccessToken(refresh_token)
         .then(newAccessToken => {
           const { access_token, expires_in } = newAccessToken;
-          Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: true });
+          Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: isProduction });
           setIsAuthenticated(true);
           setLoading(false);
         })
@@ -64,8 +68,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (access_token, refresh_token, expires_in) => {
-    Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: true });
-    Cookies.set('refresh_token', refresh_token, { secure: true });
+    Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: isProduction });
+    Cookies.set('refresh_token', refresh_token, { secure: isProduction });
     setIsAuthenticated(true);
   };
 

@@ -4,20 +4,7 @@ const Home = () => {
 
   return (
     <>
-      <h1>Hello World!</h1>
-      <a href="/logout">Logout</a>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
-      <h1>Hello World!</h1>
+      <h1 style={{ "margin": "3rem 2rem", "textAlign": "center" }}>Howdy Mr. Jacob</h1>
     </>
   )
 }
