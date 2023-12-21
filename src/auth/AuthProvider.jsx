@@ -7,6 +7,7 @@ import { Loading } from '../components';
 
 // const apiURI = 'http://localhost:5000';
 const apiURI = 'http://10.13.13.34:5000';
+const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
       refreshAccessToken(refresh_token)
         .then(newAccessToken => {
           const { access_token, expires_in } = newAccessToken;
-          Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: true });
+          Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
           setIsAuthenticated(true);
           setLoading(false);
         })
@@ -64,8 +65,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (access_token, refresh_token, expires_in) => {
-    Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: true });
-    Cookies.set('refresh_token', refresh_token, { secure: true });
+    Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+    Cookies.set('refresh_token', refresh_token, { secure: !isDevelopment });
     setIsAuthenticated(true);
   };
 

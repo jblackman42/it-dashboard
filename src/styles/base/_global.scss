@@ -22,6 +22,9 @@ main {
 		overflow-x: hidden;
 		overflow-y: auto;
 		z-index: 1;
+		
+		container-name: content;
+		container-type: inline-size;
 
 		&.flex {
 			display: flex;

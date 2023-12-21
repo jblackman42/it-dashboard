@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { HiMiniHome, HiMiniUserCircle, HiCalendarDays } from "react-icons/hi2";
-import { FaRunning, FaSlidersH } from "react-icons/fa";
+import { HiMiniHome } from "react-icons/hi2";
+// import { HiMiniHome, HiMiniUserCircle, HiCalendarDays } from "react-icons/hi2";
+// import { FaRunning, FaSlidersH } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
 
 import { Weather, Greeting } from "../components";
@@ -13,26 +14,26 @@ const links = [
     path: "/",
     text: "Home"
   },
-  {
-    icon: <HiMiniUserCircle />,
-    path: "/profile",
-    text: "Profile"
-  },
-  {
-    icon: <HiCalendarDays />,
-    path: "/calendar",
-    text: "Schedule"
-  },
-  {
-    icon: <FaRunning />,
-    path: "/activities",
-    text: "Activities"
-  },
-  {
-    icon: <FaSlidersH />,
-    path: "/settings",
-    text: "Settings"
-  },
+  // {
+  //   icon: <HiMiniUserCircle />,
+  //   path: "/profile",
+  //   text: "Profile"
+  // },
+  // {
+  //   icon: <HiCalendarDays />,
+  //   path: "/calendar",
+  //   text: "Schedule"
+  // },
+  // {
+  //   icon: <FaRunning />,
+  //   path: "/activities",
+  //   text: "Activities"
+  // },
+  // {
+  //   icon: <FaSlidersH />,
+  //   path: "/settings",
+  //   text: "Settings"
+  // },
   {
     icon: <CgLogOut />,
     path: "/logout",

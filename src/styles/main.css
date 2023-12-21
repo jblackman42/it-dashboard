@@ -337,6 +337,8 @@ main .content {
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 1;
+  container-name: content;
+  container-type: inline-size;
 }
 main .content.flex {
   display: flex;
@@ -741,6 +743,181 @@ h1 {
   }
 }
 
+@keyframes critical {
+  from {
+    outline-color: #e74c3c;
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+.ticket-container {
+  container-name: ticket;
+  container-type: inline-size;
+  width: 100%;
+}
+
+.ticket {
+  display: grid;
+  grid-template-columns: 90% auto;
+  padding: 1rem;
+  width: 30vw;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-radius: 16px;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  outline: 4px solid gray;
+  outline-offset: -8px;
+}
+.ticket.critical {
+  outline-color: #e74c3c;
+  animation: critical 500ms linear infinite alternate;
+}
+.ticket.high {
+  outline-color: #e74c3c;
+}
+.ticket.medium {
+  outline-color: #e67e22;
+}
+.ticket.low {
+  outline-color: #f1c40f;
+}
+.ticket .ticket-title {
+  font-size: 24px;
+  line-height: 24px;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  grid-column: 1/3;
+}
+.ticket .info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+  margin-right: 0.5rem;
+}
+.ticket .info-column .description-container {
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 125px;
+  height: 100px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ticket .info-column .description-container > div {
+  height: 100%;
+  overflow: auto;
+  padding: 8px;
+  padding-bottom: 12px;
+  margin-bottom: -12px;
+  /* width */
+  /* Track */
+  /* Handle */
+  /* Handle on hover */
+}
+.ticket .info-column .description-container > div::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.ticket .info-column .description-container > div::-webkit-scrollbar-track {
+  background-color: rgba(34, 34, 34, 0.0666666667);
+  border-radius: 4px;
+}
+.ticket .info-column .description-container > div::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1333333333);
+}
+.ticket .info-column .description-container > div::-webkit-scrollbar-thumb:hover {
+  background-color: #eee;
+}
+.ticket .info-column .details-grid {
+  display: grid;
+  grid-template-columns: auto auto max-content;
+  gap: 8px;
+}
+.ticket .info-column .details-grid p {
+  font-size: 1em;
+}
+.ticket .button-container-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ticket .button-container-column .ticket-button {
+  height: 100%;
+  border-radius: 4px;
+  padding: 2px 16px;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 4px solid white;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+.ticket .button-container-column .button-container-row {
+  display: flex;
+  justify-content: space-between;
+}
+.ticket .button-container-column .button-container-row.bottom {
+  margin-top: auto;
+}
+.ticket .button-container-column .icon-button {
+  background-color: transparent;
+  width: 100%;
+  display: flex;
+  gap: 1ch;
+  font-size: 18px;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+.ticket .button-container-column .icon-button.xl {
+  font-size: 32px;
+}
+.ticket .button-container-column .icon-button.l {
+  font-size: 24px;
+}
+.ticket .button-container-column .icon-button.red {
+  color: #c0392b;
+}
+.ticket .button-container-column .icon-button.green {
+  color: #2ecc71;
+}
+
+@container ticket (max-width: 650px) {
+  .ticket {
+    grid-template-columns: 85% auto;
+  }
+}
+@container ticket (max-width: 280px) {
+  .ticket {
+    grid-template-columns: 100%;
+  }
+  .ticket .info-column {
+    margin-right: 0;
+  }
+  .ticket .button-container-column {
+    margin-top: 0.5rem;
+    grid-row-start: 3;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .ticket .button-container-column .button-container-row {
+    gap: 1rem;
+  }
+}
 #home {
   position: relative;
   overflow: hidden;
@@ -877,4 +1054,16 @@ h1 {
   30% {
     transform: translate3d(0, -4px, 0) scaleY(1.02);
   }
+}
+#home {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin: 0.5rem;
+}
+
+.kanban-column {
+  width: -moz-max-content;
+  width: max-content;
+  width: 100%;
 }/*# sourceMappingURL=main.css.map */
