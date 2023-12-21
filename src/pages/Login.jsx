@@ -69,7 +69,7 @@ function Login({ path = "/" }) {
       const tokenData = response.data;
       const { access_token, expires_in, refresh_token } = tokenData;
 
-      login(access_token, refresh_token, expires_in);
+      await login(access_token, refresh_token, expires_in);
       navigate(path);
 
       // Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24 });

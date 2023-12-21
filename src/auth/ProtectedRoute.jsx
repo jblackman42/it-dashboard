@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { motion } from "framer-motion";
 
 import { AuthContext } from './AuthProvider';
 import { Navbar } from '../components';
@@ -22,13 +21,7 @@ export const ProtectedRoute = ({ children }) => {
       </div>
       < Navbar />
       <section className="content">
-        <motion.div
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -50, opacity: 0 }}
-        >
-          {children}
-        </motion.div>
+        {children}
       </section>
     </main>
   );

@@ -48,11 +48,14 @@
   &.low {
     outline-color: #f1c40f;
   }
+  &.complete {
+    outline-color: #27ae60;
+  }
 
 
   .ticket-title {
     font-size: 24px;
-    line-height: 24px;
+    line-height: 28px;
     margin-bottom: .5rem;
     white-space: nowrap;
     width: 100%;
@@ -147,6 +150,7 @@
     }
     .icon-button {
       background-color: transparent;
+      border-radius: 50%;
       width: 100%;
       display: flex;
       gap: 1ch;
@@ -168,7 +172,7 @@
         color: #c0392b;
       }
       &.green {
-        color: #2ecc71;
+        color: #27ae60;
       }
     }
   }

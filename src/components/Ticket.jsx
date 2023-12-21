@@ -7,8 +7,8 @@ import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import sanitizeHtml from 'sanitize-html';
 
 function Ticket({ ticketData }) {
-  console.log(ticketData)
-  const { Request_Title, Description, Request_Date, Tag, Status, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
+  // console.log(ticketData)
+  const { Request_Title, Description, Request_Date, Tag, Status, Status_ID, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
 
   const details = [
     {
@@ -38,13 +38,15 @@ function Ticket({ ticketData }) {
   ];
   
 
-  const priorityClasses = ['', 'critical', 'high', 'medium', 'low'];
-  const priorityClass = priorityClasses[Priority ? parseInt(Priority) : 0]
+  const ticketClassList = [];
+  const priorityClasses = ['critical', 'high', 'medium', 'low'];
+  if (Priority) ticketClassList.push(priorityClasses[parseInt(Priority) - 1]);
+  if (Status_ID === 3) ticketClassList.push('complete'); 
 
   return (
     <div className="ticket-container">
 
-      <div className={priorityClass + " ticket"}>
+      <div className={"ticket" + (ticketClassList.length ? ` ${ticketClassList.join(" ")}` : '')}>
         <h1 className="ticket-title">{Request_Title}</h1>
         <div className="info-column">
           <div className="description-container">

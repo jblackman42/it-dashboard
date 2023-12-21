@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 import { Ticket } from "../components";
 import { getToken } from "../auth";
 
-const getTickets = async () => {
+const getTickets = async (user_id, onlyMyTickets) => {
   const token = await getToken();
   if (!token) return null;
+
+  // console.log(onlyMyTickets)
   return await axios({
     method: "post",
     url: "https://my.pureheart.org/ministryplatformapi/procs/api_PHC_GetHelpdeskTickets",
     data: {
       "@Top": 100,
       "@Skip": 0,
-      "@IncludeClosedTickets": 0
+      "@IncludeClosedTickets": 0,
+      "@User_ID": onlyMyTickets ? parseInt(user_id) : null
     },
     headers: {
       "Authorization": `Bearer ${await getToken()}`,
@@ -26,45 +30,63 @@ const getTickets = async () => {
 const columns = [
   {
     title: "To-Do",
-    status: 1
+    filter: ticket => ticket.Status_ID === 1,
+    sortFunc: (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
   },
   {
     title: "Waiting",
-    status: 8
+    filter: ticket => ticket.Status_ID === 8,
+    sortFunc: (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
   },
   {
     title: "Working",
-    status: 2
+    filter: ticket => ticket.Status_ID === 2,
+    sortFunc: (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
   },
   {
     title: "Complete",
-    status: 3
+    filter: ticket => ticket.Status_ID === 3,
+    sortFunc: (ticketA, ticketB) => new Date(ticketB.Request_Date) - new Date(ticketA.Request_Date)
   }
 ]
 
 const Home = () => {
   const [tickets, setTickets] = useState([]);
+  const [user, setUser] = useState({});
+  const [onlyMyTickets, setOnlyMyTickets] = useState(true);
 
   useEffect(() => {
-    getTickets()
+    if (Cookies.get("user")) setUser(JSON.parse(Cookies.get("user")));
+  }, []);
+  
+  useEffect(() => {
+    console.log(onlyMyTickets)
+    if (user.userid) getTickets(user.userid, onlyMyTickets)
       .then(tickets => {
+        console.log(tickets)
         setTickets(tickets)
       })
-  }, []);
+  }, [user, onlyMyTickets]);
 
   return (
     <article id="home">
-      {Boolean(tickets.length) && columns.map(column => {
-        return (
-          <div className="kanban-column">
-            <h2>{column.title}</h2>
-            {tickets.filter(ticket => ticket.Status_ID === column.status).map(ticket => {
-              const { IT_Help_Ticket_ID } = ticket;
-              return <Ticket ticketData={ticket} key={ IT_Help_Ticket_ID } />
-            })}
-          </div>
-        )
-      })}
+      <div className="filter-container">
+        <input type="checkbox" id="my-tickets" checked={onlyMyTickets} onChange={() => setOnlyMyTickets(!onlyMyTickets)} />
+        <label htmlFor="my-tickets">My Tickets</label>
+      </div>
+      <div className="kanban-board">
+        {Boolean(tickets && tickets.length) && columns.map((column, i) => {
+          return (
+            <div className="kanban-column" key={i}>
+              <h2>{column.title}</h2>
+              {tickets.filter(column.filter).sort(column.sortFunc).map(ticket => {
+                const { IT_Help_Ticket_ID } = ticket;
+                return <Ticket ticketData={ticket} key={ IT_Help_Ticket_ID } />
+              })}
+            </div>
+          )
+        })}
+      </div>
     </article>
   )
 }

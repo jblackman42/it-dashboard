@@ -31,6 +31,16 @@ const refreshAccessToken = async (refresh_token) => await axios({
 })
   .then(response => response.data)
 
+const getUserData = async (access_token) => await axios({
+  method: "get",
+  url: "https://my.pureheart.org/ministryplatformapi/oauth/connect/userinfo",
+  headers: {
+    "Content-Type": "Application/JSON",
+    "Authorization": `Bearer ${access_token}`
+  }
+})
+  .then(response => response.data)
+
 export const AuthContext = createContext();
 
 
@@ -52,8 +62,16 @@ export const AuthProvider = ({ children }) => {
         .then(newAccessToken => {
           const { access_token, expires_in } = newAccessToken;
           Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
-          setIsAuthenticated(true);
-          setLoading(false);
+          getUserData(access_token)
+            .then(user => {
+              Cookies.set('user', JSON.stringify(user), { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+              setIsAuthenticated(true);
+              setLoading(false);
+            })
+            .catch(err => {
+              console.error("Login Failed. Could not retrieve user information.")
+              setLoading(false);
+            })
         })
         .catch(error => {
           setLoading(false);
@@ -64,10 +82,19 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (access_token, refresh_token, expires_in) => {
+  const login = async (access_token, refresh_token, expires_in) => {
     Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
     Cookies.set('refresh_token', refresh_token, { secure: !isDevelopment });
-    setIsAuthenticated(true);
+    // get user info and save it as a cookie
+    await getUserData(access_token)
+      .then(user => {
+        Cookies.set('user', JSON.stringify(user), { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+        setIsAuthenticated(true);
+      })
+      .catch(err => {
+        console.error("Login Failed. Could not retrieve user information.")
+        setIsAuthenticated(false);
+      })
   };
 
   const logout = async () => {
@@ -105,6 +132,7 @@ export const AuthProvider = ({ children }) => {
     }
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    Cookies.remove('user');
     setIsAuthenticated(false);
   };
 
@@ -114,9 +142,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      <AnimatePresence mode="wait">
-        {children}
-      </AnimatePresence>
+      {children}
     </AuthContext.Provider>
   );
 };
