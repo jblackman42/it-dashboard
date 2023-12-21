@@ -8,7 +8,9 @@ import { Weather } from '../components';
 import background from '../assets/mountains-background.jpg';
 
 // const apiURI = 'http://localhost:5000';
-const apiURI = 'http://10.13.13.34:5000';
+// const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'http://192.168.68.104:5000';
+// const apiURI = 'https://dev.phc.events';
 
 const Greetings = [
   'Howdy!',
@@ -29,7 +31,7 @@ const Greetings = [
 ]
 const currGreeting = Greetings[Math.floor(Math.random() * Greetings.length)];
 
-function Login({path="/"}) {
+function Login({ path = "/" }) {
   const [CurrentTime, setCurrentTime] = useState(new Date());
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -63,7 +65,7 @@ function Login({path="/"}) {
           password: password
         })
       });
-  
+
       const tokenData = response.data;
       const { access_token, expires_in, refresh_token } = tokenData;
 
@@ -72,17 +74,17 @@ function Login({path="/"}) {
 
       // Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24 });
       // Cookies.set('refresh_token', refresh_token);
-  
+
       // Handle success (e.g., update state, navigate)
       // login();
-  
+
     } catch (error) {
       let errorMessage = 'An unknown error occurred. Please try again later.';
-  
+
       if (error.response && error.response.data && error.response.data.msg) {
         errorMessage = error.response.data.msg;
       }
-  
+
       // console.error(errorMessage);
       setErrorMsg(errorMessage);
       // Handle error (e.g., show error message to the user)
@@ -98,9 +100,9 @@ function Login({path="/"}) {
       <div className="data-info">
         <p id="greeting" className='font-light'>{currGreeting}</p>
         <div className="row">
-          <h1 id="time" className='clock font-light'>{CurrentTime.toLocaleTimeString([], {timeStyle: 'short'}).replace('AM', '').replace('PM', '')}</h1>
+          <h1 id="time" className='clock font-light'>{CurrentTime.toLocaleTimeString([], { timeStyle: 'short' }).replace('AM', '').replace('PM', '')}</h1>
           <div className="weather-container">
-            <Weather id="weather" rounded="true"/>
+            <Weather id="weather" rounded="true" />
           </div>
         </div>
       </div>

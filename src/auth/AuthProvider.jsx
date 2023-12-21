@@ -9,11 +9,13 @@ import { Loading } from '../components';
 const apiURI = 'http://10.13.13.34:5000';
 const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
-export function parseJwt (token) {
+const isProduction = !(!process.env.NODE_ENV || process.env.NODE_ENV === "development");
+
+export function parseJwt(token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(''));
 
   return JSON.parse(jsonPayload);

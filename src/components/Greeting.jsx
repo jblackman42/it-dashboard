@@ -31,7 +31,7 @@ function Greeting() {
   return (
     <>
       {/* {user.nickname && <p className="greeting font-light" style={{width: "max-content"}}>Welcome back, {user.nickname}!</p>} */}
-      {user.nickname && <p className="greeting font-light">Welcome, {user.nickname}!</p>}
+      {user && user.nickname && <p className="greeting font-light">Welcome, {user.nickname}!</p>}
     </>
   )
 }
