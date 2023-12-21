@@ -7,9 +7,9 @@ import { AuthContext } from '../auth';
 import { Weather } from '../components';
 import background from '../assets/mountains-background.jpg';
 
-// const apiURI = 'http://localhost:5000';
+const apiURI = 'http://localhost:5000';
 // const apiURI = 'http://10.13.13.34:5000';
-const apiURI = 'http://192.168.68.104:5000';
+// const apiURI = 'http://192.168.68.104:5000';
 // const apiURI = 'https://dev.phc.events';
 
 const Greetings = [

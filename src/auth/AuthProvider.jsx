@@ -5,11 +5,9 @@ import { AnimatePresence } from "framer-motion";
 
 import { Loading } from '../components';
 
-// const apiURI = 'http://localhost:5000';
-const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'http://localhost:5000';
+// const apiURI = 'http://10.13.13.34:5000';
 const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
-
-const isProduction = !(!process.env.NODE_ENV || process.env.NODE_ENV === "development");
 
 export function parseJwt(token) {
   var base64Url = token.split('.')[1];

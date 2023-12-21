@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-// const apiURI = 'http://localhost:5000';
-const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'http://localhost:5000';
+// const apiURI = 'http://10.13.13.34:5000';
 const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 const saveAccessToken = (access_token, expires_in) => {
