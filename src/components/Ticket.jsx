@@ -6,10 +6,10 @@ import { ImAttachment } from "react-icons/im";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import sanitizeHtml from 'sanitize-html';
 
-function Ticket({ ticketData }) {
+function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns }) {
   // console.log(ticketData)
-  const { Request_Title, Description, Request_Date, Tag, Status, Status_ID, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
-
+  const { IT_Help_Ticket_ID, Request_Title, Description, Request_Date, Tag, Status, Status_ID, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
+  
   const details = [
     {
       label: "Request Date:",
@@ -69,8 +69,20 @@ function Ticket({ ticketData }) {
             <button className="icon-button xl red" title="Close Ticket"><IoCloseCircle /></button>
           </div>
           <div className="button-container-row">
-            <button className="icon-button l" title="Move Left"><FaArrowLeft /></button>
-            <button className="icon-button l" title="Move Right"><FaArrowRight /></button>
+            <button className="icon-button l" title="Move Left" onClick={() => 
+              handleTicketUpdate(
+                IT_Help_Ticket_ID,
+                "Status_ID",
+                currentColumnIndex - 1 >= 0 ? columns[currentColumnIndex - 1].status : columns[currentColumnIndex].status,
+              )
+            }><FaArrowLeft /></button>
+            <button className="icon-button l" title="Move Right" onClick={() => 
+              handleTicketUpdate(
+                IT_Help_Ticket_ID,
+                "Status_ID",
+                currentColumnIndex + 1 < columns.length ? columns[currentColumnIndex + 1].status : columns[currentColumnIndex].status,
+              )
+            }><FaArrowRight /></button>
           </div>
           <div style={{ marginTop: "auto" }}>
             <button className="icon-button m" title={`View ${Notes_Count} Note${Notes_Count===1?'':'s'}`}><FaRegComment /> {Notes_Count}</button>

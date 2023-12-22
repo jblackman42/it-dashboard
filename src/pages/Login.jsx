@@ -72,7 +72,7 @@ function Login({ path = "/" }) {
       await login(access_token, refresh_token, expires_in);
       navigate(path);
 
-      // Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24 });
+      // Cookies.set('access_token', access_token, { expires: expires_in / 86400 });
       // Cookies.set('refresh_token', refresh_token);
 
       // Handle success (e.g., update state, navigate)

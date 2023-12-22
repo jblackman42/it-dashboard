@@ -1,7 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { AnimatePresence } from "framer-motion";
 
 import { Loading } from '../components';
 
@@ -61,10 +60,11 @@ export const AuthProvider = ({ children }) => {
       refreshAccessToken(refresh_token)
         .then(newAccessToken => {
           const { access_token, expires_in } = newAccessToken;
-          Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+          Cookies.set('access_token', access_token, { expires: expires_in / 86400, secure: !isDevelopment });
+          Cookies.set('token_expiration', new Date().getTime() + (expires_in * 1000), { secure: !isDevelopment });
           getUserData(access_token)
             .then(user => {
-              Cookies.set('user', JSON.stringify(user), { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+              Cookies.set('user', JSON.stringify(user), { expires: expires_in / 86400, secure: !isDevelopment });
               setIsAuthenticated(true);
               setLoading(false);
             })
@@ -83,12 +83,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (access_token, refresh_token, expires_in) => {
-    Cookies.set('access_token', access_token, { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+    Cookies.set('access_token', access_token, { expires: expires_in / 86400, secure: !isDevelopment });
+    Cookies.set('token_expiration', new Date().getTime() + (expires_in * 1000), { secure: !isDevelopment });
     Cookies.set('refresh_token', refresh_token, { secure: !isDevelopment });
     // get user info and save it as a cookie
     await getUserData(access_token)
       .then(user => {
-        Cookies.set('user', JSON.stringify(user), { expires: expires_in / 60 / 60 / 24, secure: !isDevelopment });
+        Cookies.set('user', JSON.stringify(user), { expires: expires_in / 86400, secure: !isDevelopment });
         setIsAuthenticated(true);
       })
       .catch(err => {
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const access_token = Cookies.get('access_token');
-      const refresh_token = Cookies.get('refresh_toke');
+      const refresh_token = Cookies.get('refresh_token');
       if (access_token) {
         await axios({
           method: 'post',
@@ -132,6 +133,7 @@ export const AuthProvider = ({ children }) => {
     }
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    Cookies.remove('token_expiration');
     Cookies.remove('user');
     setIsAuthenticated(false);
   };
