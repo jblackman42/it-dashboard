@@ -52,14 +52,14 @@ class Column {
 
 const columns = [
   new Column(
-    "To-Do",
-    1,
+    "Waiting",
+    8,
     (ticket, status) => ticket.Status_ID === status,
     (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
   ),
   new Column(
-    "Waiting",
-    8,
+    "To-Do",
+    1,
     (ticket, status) => ticket.Status_ID === status,
     (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
   ),
@@ -73,7 +73,19 @@ const columns = [
     "Complete",
     3,
     (ticket, status) => ticket.Status_ID === status,
-    (ticketA, ticketB) => new Date(ticketB.Request_Date) - new Date(ticketA.Request_Date)
+    (ticketA, ticketB) => {
+      // Check if either ticket has a null resolve date
+      if (ticketA.Resolve_Date === null && ticketB.Resolve_Date !== null) {
+        return -1; // ticketA comes first (is 'smaller') because it's null
+      } else if (ticketB.Resolve_Date === null && ticketA.Resolve_Date !== null) {
+        return 1; // ticketB comes first because ticketA is not null
+      } else if (ticketA.Resolve_Date === null && ticketB.Resolve_Date === null) {
+        return 0; // Both are null, considered equal
+      } else {
+        // If both dates are not null, compare them normally
+        return new Date(ticketB.Resolve_Date) - new Date(ticketA.Resolve_Date);
+      }
+    }
   )
 ];
 
@@ -96,26 +108,28 @@ const Home = () => {
   }, [user, onlyMyTickets]);
 
   const handleTicketUpdate = (Ticket_ID, Field_Name, Field_Value) => {
-    const currTicket = tickets.find(ticket => ticket.IT_Help_Ticket_ID === Ticket_ID);
-    if (currTicket[Field_Name] === Field_Value) return;
-
+    const currTicketIndex = tickets.findIndex(ticket => ticket.IT_Help_Ticket_ID === Ticket_ID);
+    if (currTicketIndex === -1 || tickets[currTicketIndex][Field_Name] === Field_Value) return;
+  
     const updatedTicket = {
-      IT_Help_Ticket_ID: Ticket_ID,
+      ...tickets[currTicketIndex],
       [Field_Name]: Field_Value
-    }
-
-    console.log(updatedTicket)
-    
+    };
+  
+    console.log(updatedTicket);
+  
     updateTickets([updatedTicket]).then(newTicketsData => {
-      console.log(newTicketsData)
-      const ticketsCopy = tickets;
-      newTicketsData.forEach(ticket => {
-        const oldTicket = ticketsCopy.find(old => old.IT_Help_Ticket_ID === ticket.IT_Help_Ticket_ID);
-        oldTicket[Field_Name] = ticket[Field_Name];
-      })
-      setTickets(ticketsCopy);
-    })
-  }
+      console.log(newTicketsData);
+      // Create a new array with the updated ticket
+      const updatedTickets = tickets.map((ticket, index) => {
+        if (index === currTicketIndex) {
+          return { ...ticket, [Field_Name]: newTicketsData[0][Field_Name] };
+        }
+        return ticket;
+      });
+      setTickets(updatedTickets);
+    });
+  }  
 
   return (
     <article id="home">

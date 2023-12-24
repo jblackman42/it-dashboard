@@ -84,6 +84,7 @@ function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns })
               )
             }><FaArrowRight /></button>
           </div>
+          {/* <a href={`https://my.pureheart.org/mp/331-3315/${IT_Help_Ticket_ID}`} target="_blank" className="link-button">View on MP</a> */}
           <div style={{ marginTop: "auto" }}>
             <button className="icon-button m" title={`View ${Notes_Count} Note${Notes_Count===1?'':'s'}`}><FaRegComment /> {Notes_Count}</button>
             <button className="icon-button m" title={`View ${Attachments_Count} Attachment${Attachments_Count===1?'':'s'}`}><ImAttachment /> {Attachments_Count}</button>

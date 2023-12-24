@@ -787,7 +787,8 @@ h1 {
   outline-color: #f1c40f;
 }
 .ticket.complete {
-  outline-color: #27ae60;
+  outline-color: #27ae60 !important;
+  animation: none;
 }
 .ticket .ticket-title {
   font-size: 24px;
@@ -819,14 +820,17 @@ h1 {
 }
 .ticket .info-column .description-container > div {
   height: 100%;
-  overflow: auto;
-  padding: 8px;
-  padding-bottom: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 8px;
   margin-bottom: -12px;
   /* width */
   /* Track */
   /* Handle */
   /* Handle on hover */
+}
+.ticket .info-column .description-container > div, .ticket .info-column .description-container > div * {
+  word-wrap: break-word;
 }
 .ticket .info-column .description-container > div::-webkit-scrollbar {
   width: 8px;
