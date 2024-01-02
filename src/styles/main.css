@@ -833,8 +833,8 @@ h1 {
   word-wrap: break-word;
 }
 .ticket .info-column .description-container > div::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 .ticket .info-column .description-container > div::-webkit-scrollbar-track {
   background-color: rgba(34, 34, 34, 0.0666666667);
@@ -909,7 +909,7 @@ h1 {
     grid-template-columns: 85% auto;
   }
 }
-@container ticket (max-width: 280px) {
+@container ticket (max-width: 380px) {
   .ticket {
     grid-template-columns: 100%;
   }

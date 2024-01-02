@@ -6,9 +6,40 @@ import { ImAttachment } from "react-icons/im";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import sanitizeHtml from 'sanitize-html';
 
+
+
 function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns }) {
   // console.log(ticketData)
   const { IT_Help_Ticket_ID, Request_Title, Description, Request_Date, Tag, Status, Status_ID, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
+  
+  const getNextColumn = (currIndex) => {
+    const nextIndex = currIndex + 1;
+    if (nextIndex > columns.length-1) {
+      return columns[currIndex]
+    }
+    const nextColumn = columns[nextIndex];
+  
+    if (nextColumn.visibilityCondition === false) {
+      return nextIndex + 1 > columns.length + 1 ? columns[currIndex] : getNextColumn(nextIndex);
+    }
+  
+    return nextColumn;
+  }
+  const getPrevColumn = (currIndex) => {
+    const prevIndex = currIndex - 1;
+    if (prevIndex < 0) {
+      // console.log('no previous column');
+      return columns[currIndex]
+    }
+    const prevColumn = columns[prevIndex];
+  
+    if (prevColumn.visibilityCondition === false) {
+      // console.log('column is hidden, retrieving prev column');
+      return prevIndex - 1 < 0 ? columns[currIndex] : getPrevColumn(prevIndex);
+    }
+  
+    return prevColumn;
+  }
   
   const details = [
     {
@@ -41,7 +72,17 @@ function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns })
   const ticketClassList = [];
   const priorityClasses = ['critical', 'high', 'medium', 'low'];
   if (Priority) ticketClassList.push(priorityClasses[parseInt(Priority) - 1]);
-  if (Status_ID === 3) ticketClassList.push('complete'); 
+  if (Status_ID === 3) ticketClassList.push('complete');
+
+  // const currColumn = columns[currentColumnIndex];
+  const getCurrNextColumnStatus = () => {
+    const nextCol = getNextColumn(currentColumnIndex);
+    return nextCol.status;
+  };
+  const getCurrPrevColumnStatus = () => {
+    const prevCol = getPrevColumn(currentColumnIndex);
+    return prevCol.status;
+  };
 
   return (
     <div className="ticket-container">
@@ -73,14 +114,14 @@ function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns })
               handleTicketUpdate(
                 IT_Help_Ticket_ID,
                 "Status_ID",
-                currentColumnIndex - 1 >= 0 ? columns[currentColumnIndex - 1].status : columns[currentColumnIndex].status,
+                getCurrPrevColumnStatus(),
               )
             }><FaArrowLeft /></button>
             <button className="icon-button l" title="Move Right" onClick={() => 
               handleTicketUpdate(
                 IT_Help_Ticket_ID,
                 "Status_ID",
-                currentColumnIndex + 1 < columns.length ? columns[currentColumnIndex + 1].status : columns[currentColumnIndex].status,
+                getCurrNextColumnStatus(),
               )
             }><FaArrowRight /></button>
           </div>

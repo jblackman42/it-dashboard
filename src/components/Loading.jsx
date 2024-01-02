@@ -2,7 +2,8 @@ import React from 'react';
 
 import background from '../assets/mountains-background.jpg';
 
-function Loading() {
+const Loading = () => {
+
   return (
     <>
       <div className="fullscreen-background">
