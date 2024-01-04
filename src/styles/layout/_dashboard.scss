@@ -1,0 +1,28 @@
+.chart-card {
+  max-width: 500px;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.kpi-card-container {
+  display: flex;
+  width: 100%;
+  .kpi-data {
+    display: flex;
+    flex-direction: column;
+    h1 {
+      font-size: 4rem;
+      line-height: 4rem;
+    }
+    p {
+      margin-top: auto;
+    }
+  }
+  .kpi-chart {
+    // canvas {
+      
+    // }
+  }
+}

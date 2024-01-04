@@ -43,12 +43,13 @@ const updateTickets = async (updatedTickets) => {
 }
 
 class Column {
-  constructor(title, status, visibilityCondition, filter, sortFunc) {
+  constructor(title, status, visibilityCondition, filter, sortFunc, maxLength) {
     this.title = title
     this.status = status
     this.visibilityCondition = visibilityCondition
     this.filter = (ticket) => filter(ticket, this.status);
     this.sortFunc = sortFunc
+    this.maxLength = maxLength
   }
 }
 
@@ -63,25 +64,28 @@ const Home = () => {
   
   const columns = [
     new Column(
-      "Waiting",
-      8,
-      showWaiting,
-      (ticket, status) => ticket.Status_ID === status,
-      (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
-    ),
-    new Column(
       "To-Do",
       1,
       null,
       (ticket, status) => ticket.Status_ID === status,
-      (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
-    ),
+      (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority),
+      null
+      ),
+      new Column(
+        "Waiting",
+        8,
+        showWaiting,
+        (ticket, status) => ticket.Status_ID === status,
+        (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority),
+        null
+      ),
     new Column(
       "Working",
       2,
       null,
       (ticket, status) => ticket.Status_ID === status,
-      (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority)
+      (ticketA, ticketB) => parseInt(ticketA.Priority) - parseInt(ticketB.Priority),
+      null
     ),
     new Column(
       "Complete",
@@ -100,7 +104,8 @@ const Home = () => {
           // If both dates are not null, compare them normally
           return new Date(ticketB.Resolve_Date) - new Date(ticketA.Resolve_Date);
         }
-      }
+      },
+      2
     )
   ];
 
@@ -150,7 +155,9 @@ const Home = () => {
       .catch((err) => {
         stopLoading();
       });
-  }  
+  }
+
+  const shortenArrToMaxLength = (arr, maxLength) => maxLength !== null ? arr.slice(0, maxLength) : arr;
 
   return (
     <article id="home">
@@ -161,12 +168,12 @@ const Home = () => {
         <input type="checkbox" id="show-waiting" checked={showWaiting} onChange={() => setShowWaiting(!showWaiting)} />
         <label htmlFor="show-waiting">Show Waiting</label>
       </div>
-      <div className="kanban-board">
+      <div className="kanban-board" style={{gridTemplateColumns: `repeat(${columns.filter(column => column.visibilityCondition !== false).length}, 1fr)`}}>
         {Boolean(tickets && tickets.length) && columns.map((column, i) => {
           return (
             (column.visibilityCondition !== null ? column.visibilityCondition : true) && <div className="kanban-column" key={i}>
               <h2>{column.title} {column.status}</h2>
-              {tickets.filter(column.filter).sort(column.sortFunc).map(ticket => {
+              {shortenArrToMaxLength(tickets.filter(column.filter).sort(column.sortFunc), column.maxLength).map(ticket => {
                 const { IT_Help_Ticket_ID } = ticket;
                 return <Ticket ticketData={ticket} handleTicketUpdate={handleTicketUpdate} currentColumnIndex={i} columns={columns} key={ IT_Help_Ticket_ID } />
               })}

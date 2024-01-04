@@ -612,9 +612,18 @@ h1 {
     --navItemBorderRadius: 8px;
   }
 }
+.sidebar-container {
+  margin-right: 94px;
+}
+@media screen and (max-width: 768px) {
+  .sidebar-container {
+    margin-right: 60px;
+  }
+}
+
 .sidebar-navigation {
-  background-color: rgba(0, 0, 0, 0.2);
-  position: sticky;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
   top: 0;
   bottom: 0;
   height: 100vh;
@@ -622,6 +631,7 @@ h1 {
   width: max-content;
   padding-block: 1rem;
   box-sizing: border-box;
+  z-index: 9999;
   display: grid;
   grid-template-rows: 10% 80% 10%;
   box-shadow: 3px 0px 6px 0px rgba(0, 0, 0, 0.2);
@@ -661,6 +671,9 @@ h1 {
 }
 .sidebar-navigation ul:hover li a::after, .sidebar-navigation ul:hover li a::before, .sidebar-navigation ul:focus-within li a::after, .sidebar-navigation ul:focus-within li a::before {
   display: none !important;
+}
+.sidebar-navigation ul li, .sidebar-navigation ul p {
+  font-size: 1.5rem;
 }
 .sidebar-navigation ul li a {
   color: white;
@@ -1068,7 +1081,6 @@ h1 {
 }
 #home .kanban-board {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 #home .kanban-board .kanban-column {
@@ -1078,4 +1090,28 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.chart-card {
+  max-width: 500px;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.kpi-card-container {
+  display: flex;
+  width: 100%;
+}
+.kpi-card-container .kpi-data {
+  display: flex;
+  flex-direction: column;
+}
+.kpi-card-container .kpi-data h1 {
+  font-size: 4rem;
+  line-height: 4rem;
+}
+.kpi-card-container .kpi-data p {
+  margin-top: auto;
 }/*# sourceMappingURL=main.css.map */

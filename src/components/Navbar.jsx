@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { HiMiniHome } from "react-icons/hi2";
+import { FaChartLine } from "react-icons/fa";
 // import { HiMiniHome, HiMiniUserCircle, HiCalendarDays } from "react-icons/hi2";
 // import { FaRunning, FaSlidersH } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
@@ -14,11 +15,11 @@ const links = [
     path: "/",
     text: "Home"
   },
-  // {
-  //   icon: <HiMiniUserCircle />,
-  //   path: "/profile",
-  //   text: "Profile"
-  // },
+  {
+    icon: <FaChartLine />,
+    path: "/dashboard",
+    text: "Dash"
+  },
   // {
   //   icon: <HiCalendarDays />,
   //   path: "/calendar",
@@ -44,23 +45,25 @@ const links = [
 function Navbar() {
 
   return (
-    <nav className="sidebar-navigation">
-      <div className="img-container">
-        <img src={logo} alt="PHC" />
-      </div>
-      <div className="navigation-list">
-        <ul className="font-light">
-          {links.map(({icon, path, text}, i) => {
-            const active = window.location.pathname === path;
-            return <li key={i+1}><a className={active ? 'active' : ''} href={path}>{icon}<p>&nbsp;&nbsp;{text}</p></a></li>
-          })}
-        </ul>
-      </div>
-      <div className="welcome-message">
-        <Weather />
-        <Greeting />
-      </div>
-    </nav>
+    <div className="sidebar-container">
+      <nav className="sidebar-navigation">
+        <div className="img-container">
+          <img src={logo} alt="PHC" />
+        </div>
+        <div className="navigation-list">
+          <ul className="font-light">
+            {links.map(({icon, path, text}, i) => {
+              const active = window.location.pathname === path;
+              return <li key={i+1}><a className={active ? 'active' : ''} href={path}>{icon}<p>&nbsp;&nbsp;{text}</p></a></li>
+            })}
+          </ul>
+        </div>
+        <div className="welcome-message">
+          <Weather />
+          <Greeting />
+        </div>
+      </nav>
+    </div>
   )
 }
 

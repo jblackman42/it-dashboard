@@ -1,4 +1,4 @@
-$navBackgroundColor: rgba(0, 0, 0, 0.2);
+$navBackgroundColor: rgba(0, 0, 0, 0.4);
 $navHoverBackgroundColor: white;
 $navTextColor: white;
 $navHoverTextColor: black;
@@ -21,15 +21,22 @@ $navHoverTextColor: black;
 }
 
 // Sidebar Navigation Styles
+.sidebar-container {
+  margin-right: 94px;
+  @media screen and (max-width: 768px) {
+    margin-right: 60px;
+  }
+}
 .sidebar-navigation {
   background-color: $navBackgroundColor;
-  position: sticky;
+  position: absolute;
   top: 0;
   bottom: 0;
   height: 100vh;
   width: max-content;
   padding-block: 1rem;
   box-sizing: border-box;
+  z-index: 9999;
 
   display: grid;
   grid-template-rows: 10% 80% 10%;
@@ -81,6 +88,9 @@ $navHoverTextColor: black;
       }
     }
     // List Item Styles
+    li, p {
+      font-size: 1.5rem;
+    }
     li a {
       color: $navTextColor;
       text-decoration: none;

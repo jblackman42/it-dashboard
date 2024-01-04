@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Helmet from "react-helmet"
 
-import { Login, Logout, Error, Home} from './pages';
+import { Login, Logout, Error, Home, Dashboard} from './pages';
 import { AuthProvider, ProtectedRoute } from './auth';
 import './styles/main.css';
 
@@ -15,8 +15,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute isLoading={true}>
+      <ProtectedRoute>
         <Home />
+      </ProtectedRoute>
+    ),
+    errorElement: <Error />,
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
       </ProtectedRoute>
     ),
     errorElement: <Error />,
