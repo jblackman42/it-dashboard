@@ -1,9 +1,10 @@
 import React, { useEffect, forwardRef, useRef } from "react";
 
-import Chart from "chart.js/auto";
+import Chart, { defaults } from "chart.js/auto";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CategoryScale } from "chart.js";
-import {  Doughnut, Line, Bar } from "react-chartjs-2";
+import { Doughnut, Line, Bar } from "react-chartjs-2";
+// import "chartjs-plugin-doughnut-innertext";
 
 import { IoTrendingDown, IoTrendingUp } from "react-icons/io5";
 // import axios from "axios";
@@ -13,8 +14,85 @@ import { IoTrendingDown, IoTrendingUp } from "react-icons/io5";
 
 Chart.register(CategoryScale);
 Chart.register(ChartDataLabels);
+console.log(ChartDataLabels)
+Chart.register({
+  id: 'doughnutCenterText',
+  beforeDraw: function(chart) {
+    if (chart.config.type === "doughnut" && chart.config.options.plugins && chart.config.options.plugins.center) {
+      // Get ctx from string
+      var ctx = chart.ctx;
 
-const chartColors = [
+      const context = {
+        chart: chart,
+        datasets: chart.data.datasets
+      }
+
+
+      // Get options from the center object in options
+      var centerConfig = chart.config.options.plugins.center;
+      var fontStyle = centerConfig.fontStyle || 'Arial';
+      var txt = "Total: " + (typeof centerConfig.text === 'function' ? centerConfig.text(context) : centerConfig.text);
+      var color = centerConfig.color || '#000';
+      console.log((chart.height / 50).toFixed(2) + "em " + fontStyle);
+      // Start with a base font of 30px
+      
+      // Find out how much the font can grow in width.
+      
+      
+      // Set font settings to draw it correctly.
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+      var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+      // ctx.font = "18 px ";
+      ctx.font = "18px " + fontStyle;
+      ctx.fillStyle = color;
+      
+      var doughnutInnerWidth = (chart.width - 32) / 2;
+      var stringWidth = ctx.measureText(txt).width;
+
+      var widthRatio = doughnutInnerWidth / stringWidth;
+      var newFontSize = Math.floor(30 * widthRatio) / 3;
+      ctx.font = `${newFontSize}px ${fontStyle}`;
+      
+      //Draw text in center
+      ctx.fillText(txt, centerX, centerY);
+    }
+  }
+});
+
+// Set defaults
+// defaults.options.scale.x.ticks.display = false;
+// defaults.options.scale.x.grid.display = false;
+// defaults.scale.x.ticks.display = false;
+// defaults.scale.border.display = false;
+defaults.scale.grid.display = false;
+// defaults.scale.ticks.display = false;
+defaults.plugins.datalabels.display = false;
+defaults.plugins.title.display = false;
+// Chart.defaults.plugins.legend.display = false; // Example for global legend settings
+
+// Chart.defaults.scales.x = {
+//   grid: {
+//     display: false
+//   }
+// };
+
+// Chart.defaults.scales.y = {
+//   grid: {
+//     display: false // or false, depending on your preference
+//   }
+// };
+// Chart.defaults.scale.x.ticks.display = false;
+// Chart.defaults.scale.x.grid.display = false;
+// Chart.defaults.scale.x.border.display = false;
+// Chart.defaults.scale.y.ticks.display = false;
+// Chart.defaults.scale.y.grid.display = false;
+// Chart.defaults.scale.y.border.display = false;
+// Chart.defaults.plugins.title.display = false;
+// Chart.defaults.plugins.datalabels.display = false;
+
+const chartColors = [ // MUST BE HEX
   "#1abc9c",       // Turquoise
   "#f1c40f",       // Yellow
   "#3498db",       // Light Blue
@@ -31,9 +109,10 @@ const chartColors = [
   "#7986cb"        // Indigo
 ];
 
-const pieConfig = (title, units, labels, values) => {
+const pieChart = forwardRef(({title, units, labels, values}, ref) => {
   return (
     <Doughnut
+      ref={ref}
       data={{
         labels: labels,
         datasets: values.map((valuesArr, i) => {
@@ -49,34 +128,87 @@ const pieConfig = (title, units, labels, values) => {
       options={{
         plugins: {
           datalabels: {
-            color: '#FFF',
-            font: {
-              size: 18,
+            display: true,
+            labels: {
+              value: {
+                color: (x) => {
+                  // console.log(x);
+                  return '#FFF';
+                },
+                font: {
+                  size: '18px'
+                },
+                // backgroundColor: '#fff',
+                // borderColor: '#fff',
+                borderWidth: 2,
+                borderRadius: 4,
+                padding: 0,
+                align: 'center',
+                formatter: (val, ctx) => {
+                  const chartTotal = ctx.dataset.data.reduce((accum, val) => accum + val);
+                  return val >= chartTotal / 20 ? ((val / chartTotal) * 100).toFixed(0) + '%' : null;
+                }
+              },
             },
-            formatter: (value, context) => {
-              const total = context.dataset.data.reduce((acc, value) => acc + value, 0);
-              const percentage = (value / total * 100).toFixed(0); // Calculate percentage
-              return percentage > 5 ? `${percentage}%` : null; // Display as a percentage string
-            }
           },
-        },
+          center: {
+            text: (context) => {
+              const dataMatrix = context.datasets.map(dataset => dataset.data);
+              return dataMatrix.flat().reduce((acc, val) => acc + val, 0);
+            },
+            color: '#222'
+          }
+        }
       }}
     />
   )
-}
+});
 
-const lineConfig = (title, units, labels, values) => {
+const lineChart = forwardRef(({title, units, labels, values}, ref) => {
+  useEffect(() => {
+    if (ref.current) {
+      const chartInstance = ref.current; // Access the chart instance
+      const ctx = chartInstance.ctx;
+
+      chartInstance.data.datasets.forEach(dataset => {
+        const borderColor = dataset.borderColor;
+        // console.log(borderColor)
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, chartInstance.height);
+        gradient.addColorStop(0, borderColor + '66'); // Use the borderColor as the start color
+        gradient.addColorStop(1, "rgba(255, 255, 255, 0.2)"); // End color
+
+        dataset.backgroundColor = gradient;
+      })
+      chartInstance.update();
+  
+      // if (chartInstance.data.datasets.length > 0 && chartInstance.data.datasets[0].borderColor) {
+      //   const startColor = chartInstance.data.datasets[0].borderColor;
+  
+      //   const gradient = ctx.createLinearGradient(0, 0, 0, chartInstance.height);
+      //   gradient.addColorStop(0, startColor); // Use the borderColor as the start color
+      //   gradient.addColorStop(0.8, "rgba(255, 255, 255, 1)"); // End color
+  
+      //   // Apply the gradient to the backgroundColor of the first dataset
+      //   chartInstance.data.datasets[0].backgroundColor = gradient;
+      //   chartInstance.update();
+      // }
+    }
+  }, [ref]);
+
   return (
-    <Line 
+    <Line
+      ref={ref}
       data={{
         labels: labels,
         datasets: values.map((valuesArr, i) => {
           return {
             label: units[i],
             data: valuesArr,
-            fill: false,
+            fill: true,
             borderColor: chartColors[i],
-            tension: 0.1
+            tension: 0.1,
+            radius: 0
           }
         })
       }}
@@ -87,17 +219,24 @@ const lineConfig = (title, units, labels, values) => {
             text: title
           },
           datalabels: {
-            display: false
+            display: true,
+            align: 'center',
+            anchor: 'start',
+            formatter: (value, context) => context.dataIndex === context.dataset.data.length - 1 ? value : null,
+            backgroundColor: (context) => chartColors[context.datasetIndex],
+            color: '#FFF',
+            borderRadius: 5,
           }
         }
       }}
     />
   )
-}
+});
 
-const barConfig = (title, units, labels, values) => {
+const barChart = forwardRef(({title, units, labels, values}, ref) => {
   return (
-    <Bar 
+    <Bar
+      ref={ref}
       data={{
         labels: labels,
         datasets: values.map((valuesArr, i) => {
@@ -111,8 +250,16 @@ const barConfig = (title, units, labels, values) => {
       options={{
         scales: {
           y: {
-            beginAtZero: true
-          }
+            beginAtZero: true,
+            ticks: { display: false },
+            grid: { display: false },
+            border: { display: false }
+          },
+          x: {
+            // ticks: { display: false },
+            // grid: { display: false },
+            // border: { display: false }
+          },
         },
         plugins: {
           title: {
@@ -120,13 +267,17 @@ const barConfig = (title, units, labels, values) => {
             text: title
           },
           datalabels: {
-            color: '#FFF'
+            display: true,
+            // color: (context) => chartColors[context.datasetIndex],
+            color: '#FFF',
+            align: 'bottom',
+            anchor: 'end'
           }
         }
       }}
     />
   )
-}
+});
 
 const KPIChart = forwardRef(({title, units, labels, values}, ref) => {
   const percentChange = (((values[0].at(-1) - values[0].at(-2)) / values[0].at(-2)) * 100).toFixed(2);
@@ -175,39 +326,21 @@ const KPIChart = forwardRef(({title, units, labels, values}, ref) => {
           options={{
             responsive: true,
             scales: {
-              x: {
-                ticks: {
-                  display: false
-                },
-                grid: {
-                  display: false
-                },
-                border: {
-                  display: false
-                }
-              },
               y: {
                 beginAtZero: false,
                 min: minValue,
-                ticks: {
-                  display: false
-                },
-                grid: {
-                  display: false
-                },
-                border: {
-                  display: false
-                }
+                ticks: { display: false },
+                grid: { display: false },
+                border: { display: false }
+              },
+              x: {
+                ticks: { display: false },
+                grid: { display: false },
+                border: { display: false }
               },
             },
             plugins: {
-              title: {
-                display: false,
-              },
               legend: {
-                display: false
-              },
-              datalabels: {
                 display: false
               }
             }
@@ -219,10 +352,10 @@ const KPIChart = forwardRef(({title, units, labels, values}, ref) => {
 });
 
 const chartTypes = {
-  pie: pieConfig,
-  doughnut: pieConfig,
-  line: lineConfig,
-  bar: barConfig,
+  pie: pieChart,
+  doughnut: pieChart,
+  line: lineChart,
+  bar: barChart,
   kpi: KPIChart
 }
 

@@ -4,8 +4,9 @@ import Cookies from 'js-cookie';
 
 import { Loading } from '../components';
 
-const apiURI = 'http://localhost:5000';
+// const apiURI = 'http://localhost:5000';
 // const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'https://dev.phc.events';
 const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 export function parseJwt(token) {

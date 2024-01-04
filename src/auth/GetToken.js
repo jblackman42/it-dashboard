@@ -1,8 +1,9 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-const apiURI = 'http://localhost:5000';
+// const apiURI = 'http://localhost:5000';
 // const apiURI = 'http://10.13.13.34:5000';
+const apiURI = 'https://dev.phc.events';
 const isDevelopment = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development');
 
 const saveAccessToken = (access_token, expires_in_seconds) => {
