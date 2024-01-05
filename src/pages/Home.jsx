@@ -119,7 +119,7 @@ const Home = () => {
     if (user.userid) getTickets(user.userid, onlyMyTickets)
       .then(tickets => {
         // console.log(tickets)
-        setTickets(tickets)
+        setTickets(tickets);
         stopLoading();
       })
       .catch((err) => {

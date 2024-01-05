@@ -14,7 +14,6 @@ import { IoTrendingDown, IoTrendingUp } from "react-icons/io5";
 
 Chart.register(CategoryScale);
 Chart.register(ChartDataLabels);
-console.log(ChartDataLabels)
 Chart.register({
   id: 'doughnutCenterText',
   beforeDraw: function(chart) {
@@ -33,7 +32,6 @@ Chart.register({
       var fontStyle = centerConfig.fontStyle || 'Arial';
       var txt = "Total: " + (typeof centerConfig.text === 'function' ? centerConfig.text(context) : centerConfig.text);
       var color = centerConfig.color || '#000';
-      console.log((chart.height / 50).toFixed(2) + "em " + fontStyle);
       // Start with a base font of 30px
       
       // Find out how much the font can grow in width.
@@ -61,36 +59,9 @@ Chart.register({
   }
 });
 
-// Set defaults
-// defaults.options.scale.x.ticks.display = false;
-// defaults.options.scale.x.grid.display = false;
-// defaults.scale.x.ticks.display = false;
-// defaults.scale.border.display = false;
 defaults.scale.grid.display = false;
-// defaults.scale.ticks.display = false;
 defaults.plugins.datalabels.display = false;
 defaults.plugins.title.display = false;
-// Chart.defaults.plugins.legend.display = false; // Example for global legend settings
-
-// Chart.defaults.scales.x = {
-//   grid: {
-//     display: false
-//   }
-// };
-
-// Chart.defaults.scales.y = {
-//   grid: {
-//     display: false // or false, depending on your preference
-//   }
-// };
-// Chart.defaults.scale.x.ticks.display = false;
-// Chart.defaults.scale.x.grid.display = false;
-// Chart.defaults.scale.x.border.display = false;
-// Chart.defaults.scale.y.ticks.display = false;
-// Chart.defaults.scale.y.grid.display = false;
-// Chart.defaults.scale.y.border.display = false;
-// Chart.defaults.plugins.title.display = false;
-// Chart.defaults.plugins.datalabels.display = false;
 
 const chartColors = [ // MUST BE HEX
   "#1abc9c",       // Turquoise
@@ -279,7 +250,7 @@ const barChart = forwardRef(({title, units, labels, values}, ref) => {
   )
 });
 
-const KPIChart = forwardRef(({title, units, labels, values}, ref) => {
+const KPIChart = forwardRef(({title, units, values}, ref) => {
   const percentChange = (((values[0].at(-1) - values[0].at(-2)) / values[0].at(-2)) * 100).toFixed(2);
   const borderColor = percentChange > 0 ? '#27ae60' : percentChange < 0 ? '#c0392b' : '#2c3e50';
   const trendIcon = percentChange > 0 ? <IoTrendingUp /> : percentChange < 0 ? <IoTrendingDown /> : null;
@@ -315,7 +286,8 @@ const KPIChart = forwardRef(({title, units, labels, values}, ref) => {
         <Line 
           ref={ref}
           data={{
-            labels: labels,
+            // labels: [...Array(values[0].length)].map(x => 'test'),
+            labels: Array(values[0].length).fill(0),
             datasets: [{
               data: values[0],
               fill: true,
