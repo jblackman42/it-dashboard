@@ -95,6 +95,8 @@ h1 {
 
 .row {
 	display: flex;
+	// overflow: hidden;
+	width: max-content;
 }
 
 .img-container {

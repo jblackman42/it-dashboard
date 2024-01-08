@@ -401,6 +401,8 @@ h1 {
 
 .row {
   display: flex;
+  width: -moz-max-content;
+  width: max-content;
 }
 
 .img-container {
@@ -1092,26 +1094,106 @@ h1 {
   gap: 1rem;
 }
 
-.chart-card {
-  max-width: 500px;
-  background-color: white;
-  margin: 1rem;
-  padding: 1rem;
-  border-radius: 1rem;
-}
-
-.kpi-card-container {
-  display: flex;
-  width: 100%;
-}
-.kpi-card-container .kpi-data {
+#dashboard {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  width: -moz-max-content;
+  width: max-content;
+  margin: 2rem auto;
 }
-.kpi-card-container .kpi-data h1 {
+#dashboard .row {
+  gap: 1rem;
+}
+#dashboard .column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chart-card {
+  width: 450px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 1rem;
+  box-sizing: border-box;
+}
+.chart-card.half {
+  width: 225px;
+}
+.chart-card.half h1, .chart-card.half h2, .chart-card.half h3, .chart-card.half h4, .chart-card.half h5, .chart-card.half h6, .chart-card.half p {
+  text-align: center;
+}
+.chart-card.kpi-chart-card {
+  height: 50%;
+}
+.chart-card .chart-title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.chart-card h1 {
   font-size: 4rem;
   line-height: 4rem;
 }
-.kpi-card-container .kpi-data p {
+.chart-card p {
+  margin-top: auto;
+  font-size: 1.15rem;
+}
+.chart-card .chart-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.chart-card .chart-legend.column {
+  max-width: 150px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+.chart-card .chart-legend.column .label-value {
+  font-size: 18px !important;
+  white-space: nowrap;
+  width: calc(100% - 40px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.chart-card .chart-legend .legend-value {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  max-width: 100%;
+}
+.chart-card .chart-legend .legend-value .label-color {
+  width: 40px;
+  height: 14px;
+}
+.chart-card .chart-legend .legend-value .label-value {
+  font-size: 14px;
+}
+.chart-card .doughnut-chart {
+  max-width: 250px;
+}
+.chart-card .kpi-card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.chart-card .kpi-card .kpi-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.chart-card .kpi-card .kpi-chart {
+  max-height: 120px;
   margin-top: auto;
 }/*# sourceMappingURL=main.css.map */
