@@ -1124,10 +1124,12 @@ h1 {
   border-radius: 1rem;
   box-sizing: border-box;
 }
-.chart-card.half {
+.chart-card.numeric-kpi {
   width: 225px;
+  outline: 2px solid currentColor;
+  outline-offset: -6px;
 }
-.chart-card.half h1, .chart-card.half h2, .chart-card.half h3, .chart-card.half h4, .chart-card.half h5, .chart-card.half h6, .chart-card.half p {
+.chart-card.numeric-kpi h1, .chart-card.numeric-kpi h2, .chart-card.numeric-kpi h3, .chart-card.numeric-kpi h4, .chart-card.numeric-kpi h5, .chart-card.numeric-kpi h6, .chart-card.numeric-kpi p {
   text-align: center;
 }
 .chart-card.kpi-chart-card {

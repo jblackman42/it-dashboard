@@ -302,7 +302,12 @@ const barChart = forwardRef(({title, units, labels, values}, ref) => {
 
 const KPIChart = forwardRef(({title, units, values, reverse, daysBack}, ref) => {
   const percentChange = calculatePercentChange(values);
-  const borderColor = percentChange > 0 || (percentChange < 0 && reverse) ? '#27ae60' : percentChange < 0 || (percentChange > 0 && reverse) ? '#c0392b' : '#2c3e50';
+  let borderColor = percentChange > 0 ? '#27ae60' : percentChange < 0 ? '#c0392b' : '#2c3e50';
+  if (borderColor === '#27ae60' && reverse === true) {
+    borderColor = '#c0392b';
+  } else if (borderColor === '#c0392b' && reverse === true) {
+    borderColor = '#27ae60';
+  }
   // const trendIcon = percentChange > 0 ? <IoTrendingUp /> : percentChange < 0 ? <IoTrendingDown /> : null;
   const minValue = Math.min(...values) - 0.2;
   const showChart = values.length > 1;
@@ -310,7 +315,7 @@ const KPIChart = forwardRef(({title, units, values, reverse, daysBack}, ref) => 
   if (daysBack && daysBack < values.length) values = values.slice(values.length-daysBack, values.length);
 
   return (
-    <div className={(!showChart ? 'half ' : '') + 'chart-card'}>
+    <div className={(!showChart ? 'numeric-kpi ' : '') + 'chart-card'}>
       <div className="kpi-card">
         <div className="kpi-data">
           <h3>{ title }</h3>

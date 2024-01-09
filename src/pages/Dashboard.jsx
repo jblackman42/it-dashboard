@@ -102,11 +102,8 @@ const Dashboard = () => {
           });
 
           daysBackArray.forEach(date => {
-
             pushToArray(setOpenedToday, tickets.filter(ticket => ticket.Status_ID !== 4 && new Date(ticket.Request_Date).toLocaleDateString() === new Date(date).toLocaleDateString()).length);
             pushToArray(setResolvedToday, tickets.filter(ticket => ticket.Status_ID === 3 && new Date(ticket.Resolve_Date).toLocaleDateString() === new Date(date).toLocaleDateString()).length)
-            
-
           });
 
           setTotalTicketsOpened(tickets.filter(ticket => ticket.Status_ID !== 4).length);
@@ -114,6 +111,9 @@ const Dashboard = () => {
 
           setDaysBackTicketsOpened(tickets.filter(ticket => ticket.Status_ID !== 4 && new Date(ticket.Request_Date) > oldestDate).length)
           setDaysBackTicketsResolved(tickets.filter(ticket => ticket.Status_ID === 3 && new Date(ticket.Resolve_Date) > oldestDate).length)
+
+          const ticketResponseTimes = tickets.filter(ticket => ticket._First_Response_Date !== null).map(ticket => new Date(ticket._First_Response_Date).getTime() - new Date(ticket.Request_Date).getTime());
+          console.log((ticketResponseTimes.reduce((accum, val) => accum + val, 0) / ticketResponseTimes.length) / 3600000);
 
           stopLoading();
         })
