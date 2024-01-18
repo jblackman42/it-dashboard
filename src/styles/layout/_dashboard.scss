@@ -27,16 +27,29 @@ $defaultChartWidth: 450px;
   place-items: center;
 
   background-color: rgba(255,255,255,0.55);
+  outline: 2px solid rgba(255,255,255,0.8);
+  outline-offset: -2px;
   backdrop-filter: blur(4px);
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+	// box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  // box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   // margin: 1rem;
   padding: 1rem;
   border-radius: 1rem;
   box-sizing: border-box;
   &.numeric-kpi {
     width: calc($defaultChartWidth / 2);
+    .kpi-data {
+      gap: .5rem;
+    }
     h1, h2, h3, h4, h5, h6, p {
       text-align: center;
+    }
+    h1 {
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 100%; /* Adjust based on your layout */
+      font-size: 100px; /* Start with a large font size */
     }
     outline: 2px solid currentColor;
     outline-offset: -6px;
@@ -63,7 +76,7 @@ $defaultChartWidth: 450px;
     align-items: center;
     overflow: hidden;
     flex-wrap: wrap;
-    gap: 0 .5rem;
+    gap:  .5rem !important;
     margin-bottom: .5rem;
     &.column {
       max-width: 150px;
@@ -104,7 +117,9 @@ $defaultChartWidth: 450px;
     .kpi-data {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      // justify-content: space-between;
+      justify-content: center;
+      max-width: calc(($defaultChartWidth / 2) - (1rem * 2));
     }
     .kpi-chart {
       max-height: 120px;
