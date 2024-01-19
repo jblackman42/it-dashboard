@@ -24,23 +24,6 @@ const getTickets = async (user_id, onlyMyTickets) => {
   }).then((response) => response.data[0]);
 };
 
-const updateTickets = async (updatedTickets) => {
-  return await axios({
-    method: "put",
-    url: "https://my.pureheart.org/ministryplatformapi/tables/IT_Help_Tickets",
-    params: {
-      $allowCreate: "false",
-      $select:
-        "IT_Help_Ticket_ID, Description, Agent_ID, Priority_ID, Request_Date, Request_Method_ID, Request_Title, Resolve_Date, Status_ID, Tag_ID, Ticket_Requestor_ID",
-    },
-    data: updatedTickets,
-    headers: {
-      Authorization: `Bearer ${await getToken()}`,
-      "Content-Type": "Application/JSON",
-    },
-  }).then((response) => response.data);
-};
-
 class Column {
   constructor({
     title,
@@ -74,9 +57,38 @@ const Home = () => {
   const [onlyMyTickets, setOnlyMyTickets] = useState(true);
   const [showWaiting, setShowWaiting] = useState(false);
 
+  const updateTickets = async (updatedTickets) => {
+    // console.log(updatedTickets);
+    await axios({
+      method: "put",
+      url: "https://my.pureheart.org/ministryplatformapi/tables/IT_Help_Tickets",
+      params: {
+        $allowCreate: "false",
+        $select:
+          "IT_Help_Ticket_ID, Description, Agent_ID, Priority_ID, Request_Date, Request_Method_ID, Request_Title, Resolve_Date, Status_ID, Tag_ID, Ticket_Requestor_ID",
+      },
+      data: updatedTickets,
+      headers: {
+        Authorization: `Bearer ${await getToken()}`,
+        "Content-Type": "Application/JSON",
+      },
+    }).then((response) => {
+      if (response.status < 200 && response.status >= 300) return; //return if status isn't a 200 response
+      const cloneTickets = [...tickets];
+      updatedTickets.forEach((newTicket) => {
+        const oldTicketIndex = cloneTickets.findIndex(
+          (t) => t.IT_Help_Ticket_ID === newTicket.IT_Help_Ticket_ID
+        );
+        cloneTickets[oldTicketIndex] = newTicket;
+      });
+      setTickets(cloneTickets);
+    });
+  };
+
   const ticketFields = {
     Priority_ID: {
       Ticket_Field: "Priority_ID", // field on ticket that is foreign key to desired table
+      Ticket_Label_Field: "Priority", // field on ticket that should be set to the label of the selected value
       Table_Name: "Ticket_Priority", // name of table Ticket_Field is foreign key to
       Table_Value_Name: "Ticket_Priority_ID", // field name on table to use as option value in dropdown
       Table_Label_Name: "Priority", // field on table user should see on dropdown option
@@ -85,6 +97,7 @@ const Home = () => {
     },
     Tag_ID: {
       Ticket_Field: "Tag_ID",
+      Ticket_Label_Field: "Tag",
       Table_Name: "Helpdesk_Tags",
       Table_Value_Name: "IT_Help_ID",
       Table_Label_Name: "Tag",
@@ -92,7 +105,8 @@ const Home = () => {
       Input_Type: null,
     },
     Agent_ID: {
-      Ticket_Field: "Agent_User_ID",
+      Ticket_Field: "Agent_ID",
+      Ticket_Label_Field: "Agent_Name",
       Table_Name: "IT_Operators",
       Table_Value_Name: "IT_Operators_ID",
       Table_Label_Name: "First_Name",
@@ -101,6 +115,7 @@ const Home = () => {
     },
     Request_Method_ID: {
       Ticket_Field: "Request_Method_ID",
+      Ticket_Label_Field: "Request_Method",
       Table_Name: "IT_Ticket_Request_Methods",
       Table_Value_Name: "IT_Ticket_Request_Method_ID",
       Table_Label_Name: "Ticket_Request_Method",
@@ -109,11 +124,12 @@ const Home = () => {
     },
     Resolve_Date: {
       Ticket_Field: "Resolve_Date",
+      Ticket_Label_Field: null,
       Table_Name: null,
       Table_Value_Name: null,
       Table_Label_Name: null,
       Input_Label: "Resolve Date",
-      Input_Type: "datetime-label",
+      Input_Type: "datetime-local",
     },
   };
 
@@ -146,7 +162,7 @@ const Home = () => {
     new Column({
       title: "Complete",
       status: 3,
-      maxLength: 20,
+      maxLength: 2,
       sortFunc: (ticketA, ticketB) => {
         // Check if either ticket has a null resolve date
         if (ticketA.Resolve_Date === null && ticketB.Resolve_Date !== null) {
@@ -189,7 +205,7 @@ const Home = () => {
       startLoading();
       getTickets(user.userid, onlyMyTickets)
         .then((tickets) => {
-          console.log(tickets);
+          // console.log(tickets);
           setTickets(tickets);
           stopLoading();
         })
@@ -217,8 +233,11 @@ const Home = () => {
           return currTicket[field.Ticket_Field] === null;
         });
         if (missingFields.length) {
+          const cloneCurrTicket = { ...currTicket };
+          cloneCurrTicket[Field_Name] = Field_Value;
+          cloneCurrTicket.Status = currColumn.title;
           setShowEditMenu(true);
-          setEditTicket(currTicket);
+          setEditTicket(cloneCurrTicket);
           setEditTicketMissingFields(missingFields);
           return;
         }
@@ -226,6 +245,7 @@ const Home = () => {
       // console.log(tickets[currTicketIndex][Field_Name]);
       // console.log(Field_Value);
     }
+    console.log("no missing fields found: updating ticket.");
     const updatedTicket = {
       ...currTicket,
       [Field_Name]: Field_Value,
@@ -233,16 +253,7 @@ const Home = () => {
 
     startLoading();
     updateTickets([updatedTicket])
-      .then((newTicketsData) => {
-        // console.log(newTicketsData);
-        // Create a new array with the updated ticket
-        const updatedTickets = tickets.map((ticket) => {
-          if (ticket.IT_Help_Ticket_ID === currTicket.IT_Help_Ticket_ID) {
-            return { ...ticket, [Field_Name]: newTicketsData[0][Field_Name] };
-          }
-          return ticket;
-        });
-        setTickets(updatedTickets);
+      .then(() => {
         stopLoading();
       })
       .catch((err) => {
@@ -260,6 +271,7 @@ const Home = () => {
         setShowEditMenu={setShowEditMenu}
         editTicket={editTicket}
         editTicketMissingFields={editTicketMissingFields}
+        updateTickets={updateTickets}
       />
       {/* {showEditMenu && (
         <div id="edit-menu-container" onClick={() => setShowEditMenu(false)}>

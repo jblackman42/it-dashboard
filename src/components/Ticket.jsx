@@ -1,4 +1,3 @@
-// import React, { useEffect, useState } from 'react';
 import React from "react";
 
 import { FaRegComment, FaArrowLeft, FaArrowRight } from "react-icons/fa";
@@ -12,7 +11,6 @@ function Ticket({
   currentColumnIndex,
   columns,
 }) {
-  // console.log(ticketData)
   const {
     IT_Help_Ticket_ID,
     Request_Title,
@@ -22,7 +20,7 @@ function Ticket({
     Status,
     Status_ID,
     Priority,
-    Agent,
+    Agent_Name,
     Request_Method,
     Attachments_Count,
     Notes_Count,
@@ -59,38 +57,44 @@ function Ticket({
     return prevColumn;
   };
 
-  const details = [
-    {
-      label: "Request Date:",
-      value: !Request_Date
-        ? "Invalid Date"
-        : new Date(Request_Date).toLocaleDateString("en-us", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          }),
-    },
-    {
-      label: "Tag",
-      value: Tag ?? "Unknown",
-    },
-    {
-      label: "Status",
-      value: Status ?? "Unknown",
-    },
-    {
-      label: "Priority",
-      value: Priority ?? "Unknown",
-    },
-    {
-      label: "Agent",
-      value: Agent ?? "Unknown",
-    },
-    {
-      label: "Request Method",
-      value: Request_Method ?? "Unknown",
-    },
-  ];
+  // const [details, setDetails] = useState([]);
+
+  // useEffect(() => {
+  //   setDetails([
+  //     {
+  //       label: "Request Date:",
+  //       value: !ticketData.Request_Date
+  //         ? "Invalid Date"
+  //         : new Date(ticketData.Request_Date).toLocaleDateString("en-us", {
+  //             month: "short",
+  //             day: "numeric",
+  //             year: "numeric",
+  //           }),
+  //     },
+  //     {
+  //       label: "Tag",
+  //       value: ticketData.Tag ?? "Unknown",
+  //     },
+  //     {
+  //       label: "Status",
+  //       value: ticketData.Status ?? "Unknown",
+  //     },
+  //     {
+  //       label: "Priority",
+  //       value: ticketData.Priority ?? "Unknown",
+  //     },
+  //     {
+  //       label: "Agent",
+  //       value: ticketData.Agent_Name ?? "Unknown",
+  //     },
+  //     {
+  //       label: "Request Method",
+  //       value: ticketData.Request_Method ?? "Unknown",
+  //     },
+  //   ]);
+  // }, [ticketData]);
+
+  // const details =
 
   const ticketClassList = [];
   const priorityClasses = ["critical", "high", "medium", "low"];
@@ -125,14 +129,46 @@ function Ticket({
             />
           </div>
           <div className="details-grid">
-            {details.map((detail, i) => {
+            <div className="detail">
+              <div className="label">Request Date:</div>
+              <div className="value">
+                {!Request_Date
+                  ? "Invalid Date"
+                  : new Date(Request_Date).toLocaleDateString("en-us", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+              </div>
+            </div>
+            <div className="detail">
+              <div className="label">Tag:</div>
+              <div className="value">{Tag}</div>
+            </div>
+            <div className="detail">
+              <div className="label">Status:</div>
+              <div className="value">{Status}</div>
+            </div>
+            <div className="detail">
+              <div className="label">Priority:</div>
+              <div className="value">{Priority}</div>
+            </div>
+            <div className="detail">
+              <div className="label">Agent:</div>
+              <div className="value">{Agent_Name}</div>
+            </div>
+            <div className="detail">
+              <div className="label">Request Method:</div>
+              <div className="value">{Request_Method}</div>
+            </div>
+            {/* {details.map((detail, i) => {
               return (
                 <div className="detail" key={i}>
                   <p className="label">{detail.label}</p>
                   <p className="value">{detail.value}</p>
                 </div>
               );
-            })}
+            })} */}
           </div>
         </div>
         <div className="button-container-column">
