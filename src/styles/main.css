@@ -954,6 +954,24 @@ h1 {
 #edit-menu-container #edit-menu {
   background-color: white;
   padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  width: 500px;
+  max-width: 90vw;
+}
+#edit-menu-container #edit-menu h3 {
+  margin: 0 auto;
+}
+#edit-menu-container #edit-menu .edit-ticket-input {
+  display: grid;
+}
+#edit-menu-container #edit-menu .button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 #home {

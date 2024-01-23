@@ -1,0 +1,74 @@
+{
+  "Example": {
+    "Ticket_Field": "field on ticket that is foreign key to desired table", 
+    "Ticket_Label_Field": "field on ticket that should be set to the label of the selected value",
+    "Table_Name": "name of table Ticket_Field is foreign key to", 
+    "Table_Value_Name": "field name on table to use as option value in dropdown", 
+    "Table_Label_Name": "field on table user should see on dropdown option", 
+    "Input_Label": "label for select input", 
+    "Input_Type": "if field is not a key to another table, use this default html input type"
+  },
+  "Request_Date": {
+    "Ticket_Field": "Request_Date",
+    "Ticket_Label_Field": null,
+    "Table_Name": null,
+    "Table_Value_Name": null,
+    "Table_Label_Name": null,
+    "Input_Label": "Request Date",
+    "Input_Type": "datetime-local"
+  },
+  "Tag_ID": {
+    "Ticket_Field": "Tag_ID",
+    "Ticket_Label_Field": "Tag",
+    "Table_Name": "Helpdesk_Tags",
+    "Table_Value_Name": "IT_Help_ID",
+    "Table_Label_Name": "Tag",
+    "Input_Label": "Tag",
+    "Input_Type": null
+  },
+  "Status_ID": {
+    "Ticket_Field": "Status_ID", 
+    "Ticket_Label_Field": "Status",
+    "Table_Name": "Ticket_Status",
+    "Table_Value_Name": "Ticket_Status_ID",
+    "Table_Label_Name": "Status",
+    "Input_Label": "Ticket Status",
+    "Input_Type": null
+  },
+  "Priority_ID": {
+    "Ticket_Field": "Priority_ID", 
+    "Ticket_Label_Field": "Priority",
+    "Table_Name": "Ticket_Priority",
+    "Table_Value_Name": "Ticket_Priority_ID",
+    "Table_Label_Name": "Priority",
+    "Input_Label": "Ticket Priority",
+    "Input_Type": null
+  },
+  "Agent_ID": {
+    "Ticket_Field": "Agent_ID",
+    "Ticket_Label_Field": "Agent_Name",
+    "Table_Name": "IT_Operators",
+    "Table_Value_Name": "IT_Operators_ID",
+    "Table_Label_Name": "First_Name",
+    "Input_Label": "Agent",
+    "Input_Type": null
+  },
+  "Request_Method_ID": {
+    "Ticket_Field": "Request_Method_ID",
+    "Ticket_Label_Field": "Request_Method",
+    "Table_Name": "IT_Ticket_Request_Methods",
+    "Table_Value_Name": "IT_Ticket_Request_Method_ID",
+    "Table_Label_Name": "Ticket_Request_Method",
+    "Input_Label": "Request Method",
+    "Input_Type": null
+  },
+  "Resolve_Date": {
+    "Ticket_Field": "Resolve_Date",
+    "Ticket_Label_Field": null,
+    "Table_Name": null,
+    "Table_Value_Name": null,
+    "Table_Label_Name": null,
+    "Input_Label": "Resolve Date",
+    "Input_Type": "datetime-local"
+  }
+}

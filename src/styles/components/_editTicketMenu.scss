@@ -11,5 +11,26 @@
   #edit-menu {
     background-color: white;
     padding: 2rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: space-between;
+
+    width: 500px;
+    max-width: 90vw;
+
+    h3 {
+      margin: 0 auto;
+    }
+    .edit-ticket-input {
+      display: grid;
+    }
+    .button-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: .5rem;
+    }
   }
 }
