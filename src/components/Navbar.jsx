@@ -2,6 +2,7 @@ import React from 'react';
 
 import { HiMiniHome } from "react-icons/hi2";
 import { FaChartLine } from "react-icons/fa";
+import { CgAlbum } from "react-icons/cg";
 // import { HiMiniHome, HiMiniUserCircle, HiCalendarDays } from "react-icons/hi2";
 // import { FaRunning, FaSlidersH } from "react-icons/fa";
 import { CgLogOut } from "react-icons/cg";
@@ -35,6 +36,11 @@ const links = [
   //   path: "/settings",
   //   text: "Settings"
   // },
+  {
+    icon: <CgAlbum />,
+    path: "/healthassessment",
+    text: "HA"
+  },
   {
     icon: <CgLogOut />,
     path: "/logout",

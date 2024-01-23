@@ -6,8 +6,6 @@ import { ImAttachment } from "react-icons/im";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import sanitizeHtml from 'sanitize-html';
 
-
-
 function Ticket({ ticketData, handleTicketUpdate, currentColumnIndex, columns }) {
   // console.log(ticketData)
   const { IT_Help_Ticket_ID, Request_Title, Description, Request_Date, Tag, Status, Status_ID, Priority, Agent, Request_Method, Attachments_Count, Notes_Count } = ticketData;
