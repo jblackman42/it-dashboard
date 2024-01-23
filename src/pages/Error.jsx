@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 import { motion } from "framer-motion";
 
-import background from '../assets/mountains-background.jpg';
+import background from "../assets/mountains-background.jpg";
 
 function Error() {
   return (
@@ -18,9 +18,22 @@ function Error() {
           exit={{ x: -50, opacity: 0 }}
           className="content flex column center"
         >
-          <h1 className='font-light text-shadow' style={{"textAlign": "center"}}>Error 404</h1>
-          <p className='font-light' style={{"textAlign": "center"}}>Sorry, the page you're looking for doesn't exist.</p>
-          <a href="/" className="clear-button font-light" style={{"margin": "1rem auto", "fontSize": "1.15rem"}}>Return Home</a>
+          <h1
+            className="font-light text-shadow"
+            style={{ textAlign: "center" }}
+          >
+            Error 404
+          </h1>
+          <p className="font-light" style={{ textAlign: "center" }}>
+            Sorry, the page you're looking for doesn't exist.
+          </p>
+          <a
+            href="/"
+            className="clear-button font-light"
+            style={{ margin: "1rem auto", fontSize: "1.15rem" }}
+          >
+            Return Home
+          </a>
         </motion.div>
       </section>
     </main>
@@ -41,7 +54,7 @@ function Error() {
     //     </motion.div>
     //   </section>
     // </>
-  )
+  );
 }
 
-export default Error
+export default Error;

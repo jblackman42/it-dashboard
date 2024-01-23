@@ -100,7 +100,7 @@ const calculatePercentChange = (arr) => {
       return 100;
   } else {
       // Normal percent change calculation
-      return ((end - start) / start) * 100;
+      return (((end - start) / start) * 100).toFixed(2);
   }
 }
 
@@ -301,20 +301,45 @@ const barChart = forwardRef(({title, units, labels, values}, ref) => {
 });
 
 const KPIChart = forwardRef(({title, units, values, reverse, daysBack}, ref) => {
+  if (daysBack && daysBack < values.length) values = values.slice(values.length-daysBack, values.length);
   const percentChange = calculatePercentChange(values);
-  const borderColor = percentChange > 0 || (percentChange < 0 && reverse) ? '#27ae60' : percentChange < 0 || (percentChange > 0 && reverse) ? '#c0392b' : '#2c3e50';
+  let borderColor = percentChange > 0 ? '#27ae60' : percentChange < 0 ? '#c0392b' : '#2c3e50';
+  if (borderColor === '#27ae60' && reverse === true) {
+    borderColor = '#c0392b';
+  } else if (borderColor === '#c0392b' && reverse === true) {
+    borderColor = '#27ae60';
+  }
   // const trendIcon = percentChange > 0 ? <IoTrendingUp /> : percentChange < 0 ? <IoTrendingDown /> : null;
   const minValue = Math.min(...values) - 0.2;
   const showChart = values.length > 1;
 
-  if (daysBack && daysBack < values.length) values = values.slice(values.length-daysBack, values.length);
+  const h1Ref = useRef(null);
+
+  const adjustFontSize = () => {
+    const h1 = h1Ref.current;
+    if (!h1) return;
+
+    // console.log(h1.scrollWidth - h1.offsetWidth);
+    let fontSize = 70; // Starting font size in pixels
+    h1.style.fontSize = fontSize + 'px';
+
+    while (h1.scrollWidth > h1.offsetWidth) {
+      fontSize--;
+      h1.style.fontSize = fontSize + 'px';
+    }
+  };
+
+  useEffect(() => {
+    adjustFontSize();
+  }, [values]); // Dependency array: adjust font size when 'values' changes
+
 
   return (
-    <div className={(!showChart ? 'half ' : '') + 'chart-card'}>
+    <div className={(!showChart ? 'numeric-kpi ' : '') + 'chart-card'}>
       <div className="kpi-card">
         <div className="kpi-data">
           <h3>{ title }</h3>
-          <h1>{ values.at(-1) } { units?.[0] }</h1>
+          <h1 ref={h1Ref}>{ values.at(-1) } { units?.[0] }</h1>
           {showChart && <p style={{color: borderColor}}> { percentChange > 0 ? '+' : '' }{ percentChange }% Last { values.length } Days</p>}
         </div>
         {showChart && <div className="kpi-chart">
